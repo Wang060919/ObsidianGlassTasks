@@ -2,6 +2,10 @@
 
 Windows 11 桌面待办小窗口，读取一个 Markdown 文件，支持勾选完成、撤销、Markdown 排版和 Obsidian 双链。背景使用实时桌面采样、轻模糊、圆角折射、边缘高光和轻微色散；界面固定暗色主题。
 
+![暗色玻璃待办演示：动态背景经过圆角，展示透光与边缘折射](docs/assets/showcase.gif)
+
+6 秒循环渲染演示。玻璃直接使用项目的 HLSL；示例待办与背景为展示素材。
+
 当前版本：**0.1.5**。程序使用 C++、Win32、D3D11、DXGI Desktop Duplication、DirectComposition 和透明 WebView2，不依赖 Rainmeter。
 
 ## 环境要求
