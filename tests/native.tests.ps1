@@ -38,6 +38,8 @@ $taskBridge = Invoke-NativeCheck 'bridge' $taskBridgeArguments $true
 if (-not $taskBridge.ui.fixtureResult.ok -or $taskBefore -cne (Get-FileHash -LiteralPath $taskSource).Hash) { throw 'Native writeback/undo changed original bytes' }
 if ($taskBridge.timing.frameWakeCount -lt 20) { throw 'Frame clock stopped while WebView2 was active' }
 if ($taskBridge.ui.colorScheme -ne 'dark') { throw 'The UI did not use its fixed dark palette' }
+if ($taskBridge.ui.headingText -ne 'Inbox' -or $taskBridge.ui.headingStyle -ne 'italic' -or $taskBridge.ui.headingOverlap -or $taskBridge.ui.headingFont -notmatch 'Anthropic Serif.*Georgia') { throw 'Inbox heading text, italic serif font stack or layout failed' }
+if ($taskBridge.ui.statusText -ne 'Obsidian · Auto sync' -or $taskBridge.ui.statusStyle -ne 'italic' -or -not $taskBridge.ui.fixtureResult.statusCases) { throw 'English italic status or state changes failed' }
 function Get-TaskLuminance([string]$Color) {
     $taskComponents = [regex]::Matches($Color,'\d+') | Select-Object -First 3 | ForEach-Object {
         $taskValue=[double]$_.Value/255

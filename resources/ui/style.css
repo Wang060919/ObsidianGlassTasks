@@ -25,7 +25,7 @@ button { -webkit-tap-highlight-color: transparent; }
 .header-actions { display: flex; gap: 2px; }
 .titlebar { display: flex; align-items: center; justify-content: space-between; flex: 0 0 auto; padding: 23px 20px 16px 23px; -webkit-app-region: drag; app-region: drag; user-select: none; cursor: grab; }
 .heading { display: flex; align-items: center; gap: 11px; }
-h1 { margin: 0; font-size: 21px; font-weight: 650; line-height: 1.4; letter-spacing: -.025em; }
+h1 { margin: 0; font-family: "Anthropic Serif Variable Text", "Anthropic Serif Variable", "Anthropic Serif", Georgia, serif; font-size: 23px; font-weight: 500; font-style: italic; line-height: 1.28; letter-spacing: -.02em; }
 .count { color: var(--muted); font-size: 14px; font-variant-numeric: tabular-nums; }
 .icon-button { display: grid; place-items: center; width: 32px; height: 32px; padding: 7px; border: 0; border-radius: 9px; background: transparent; color: var(--muted); }
 .icon-button:hover { background: var(--control); color: var(--blue); }
@@ -54,6 +54,7 @@ ul { list-style: none; padding: 0; margin: 0; }
 .loading { margin: 18px 12px 30px; }
 footer { margin-top: auto; padding: 10px 20px 14px 23px; flex: 0 0 auto; }
 .status-line { display: flex; align-items: center; justify-content: space-between; gap: 8px; color: var(--muted); font-size: 11px; line-height: 1.6; }
+#status { font-family: "Anthropic Serif Variable Text", "Anthropic Serif Variable", "Anthropic Serif", Georgia, serif; font-size: 12px; font-weight: 500; font-style: italic; letter-spacing: .005em; }
 .status-line .icon-button { width: 28px; height: 28px; padding: 6px; flex-shrink: 0; }
 #notice { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 6px; font-size: 12px; line-height: 1.65; }
 #notice.error { color: #ffd3c7; }

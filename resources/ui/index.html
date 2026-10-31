@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'">
-  <title>收件箱 · 桌面待办</title>
+  <title>Inbox · 桌面待办</title>
   <link rel="stylesheet" href="style.css">
   <script src="vendor/markdown-it.min.js" defer></script>
   <script type="module" src="app.mjs"></script>
@@ -12,7 +12,7 @@
 <body>
   <main class="panel" aria-label="Obsidian 任务收件箱">
     <header class="titlebar" title="拖动标题移动待办">
-      <div class="heading"><h1>收件箱</h1><span id="count" class="count" aria-label="未完成任务数">—</span></div>
+      <div class="heading"><h1 lang="en">Inbox</h1><span id="count" class="count" aria-label="未完成任务数">—</span></div>
       <div class="header-actions"><button id="open-note" class="icon-button" type="button" title="在 Obsidian 中打开收件箱" aria-label="在 Obsidian 中打开收件箱">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 5h6v6M19 5l-9 9M10 5H6a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-4"/></svg>
       </button><button id="menu" class="icon-button" type="button" title="窗口选项" aria-label="窗口选项"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg></button></div>
@@ -23,7 +23,7 @@
       <p id="loading" class="loading">正在读取收件箱…</p>
     </div>
     <footer>
-      <div class="status-line"><span id="status" role="status" aria-live="polite">正在连接笔记</span><button id="refresh" type="button" class="icon-button" title="刷新任务" aria-label="刷新任务"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 9a7.5 7.5 0 1 0 .1 5M19 4v5h-5"/></svg></button></div>
+      <div class="status-line"><span id="status" lang="en" role="status" aria-live="polite">Connecting to note…</span><button id="refresh" type="button" class="icon-button" title="刷新任务" aria-label="刷新任务"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 9a7.5 7.5 0 1 0 .1 5M19 4v5h-5"/></svg></button></div>
       <div id="notice" role="status" aria-live="polite" hidden><span id="notice-text"></span><button id="undo" type="button" hidden>撤销</button></div>
     </footer>
   </main>

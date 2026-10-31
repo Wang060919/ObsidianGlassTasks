@@ -25,7 +25,7 @@ function fitHeight() {
   send({ type: 'resize', height });
 }
 function status() {
-  elements.status.textContent = sourceError ? '暂时无法读取笔记' : materialError ? '笔记已同步 · 玻璃背景暂不可用' : paused ? 'Obsidian · 背景已暂停' : 'Obsidian · 自动同步';
+  elements.status.textContent = sourceError ? 'Note unavailable' : materialError ? 'Note synced · Glass unavailable' : paused ? 'Obsidian · Background paused' : 'Obsidian · Auto sync';
 }
 function render() {
   const previousFocus = document.activeElement?.dataset?.lineNumber;
@@ -126,12 +126,17 @@ const motion = matchMedia('(prefers-reduced-motion: reduce)');
 function preferences() { send({ type: 'preferences', reduceMotion: motion.matches }); }
 motion.addEventListener('change', preferences);
 function diagnostics() {
+  const heading = document.querySelector('.heading');
+  const title = heading.querySelector('h1');
   return {
     ready: !!settings && source !== null, fatal, tasks: tasks.length, readable,
     markdown: !!markdown, links: document.querySelectorAll('.task-body a').length,
     colorScheme: getComputedStyle(document.documentElement).colorScheme,
     textColor: getComputedStyle(document.documentElement).color,
     secondaryTextColor: getComputedStyle(elements.status).color,
+    statusText: elements.status.textContent, statusStyle: getComputedStyle(elements.status).fontStyle,
+    headingText: title.textContent, headingFont: getComputedStyle(title).fontFamily, headingStyle: getComputedStyle(title).fontStyle,
+    headingOverlap: heading.getBoundingClientRect().right > document.querySelector('.header-actions').getBoundingClientRect().left,
     width: innerWidth, height: innerHeight, dpr: devicePixelRatio,
     documentOverflow: document.documentElement.scrollWidth > innerWidth,
     listScrollable: document.querySelector('.scroll-area').scrollHeight > document.querySelector('.scroll-area').clientHeight,
@@ -155,7 +160,15 @@ async function runFixtureTest() {
     await until(() => source === original && tasks.length === count);
     const details = diagnostics();
     if (details.documentOverflow || errors.length || !details.links) throw new Error('Fixture Markdown layout failed');
-    fixtureResult = { ok: true, probe: true, completedTaskDisappeared: true, undoRestoredSource: true, tasks: count, links: details.links };
+    const checkStatus = expected => {
+      status();
+      if (elements.status.textContent !== expected || elements.status.getBoundingClientRect().right > elements.refresh.getBoundingClientRect().left) throw new Error('Status text or layout failed');
+    };
+    paused = true; checkStatus('Obsidian · Background paused');
+    materialError = 'fixture'; checkStatus('Note synced · Glass unavailable');
+    sourceError = true; checkStatus('Note unavailable');
+    paused = false; materialError = ''; sourceError = false; checkStatus('Obsidian · Auto sync');
+    fixtureResult = { ok: true, probe: true, completedTaskDisappeared: true, undoRestoredSource: true, statusCases: true, tasks: count, links: details.links };
   } catch (error) { fixtureResult = { ok: false, error: error.message }; }
   report();
 }
