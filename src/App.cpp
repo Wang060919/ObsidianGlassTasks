@@ -79,7 +79,7 @@ struct App {
     std::wstring lastSource, lastSourceError, captureError, fatal, actionId;
     bool webReady=false, graphicsReady=false, fixtureTest=false, selfTest=false, sourceKnown=false;
     bool dirty=true, tracking=false, topmost=false, screenshotMode=false, reduceMotion=false;
-    bool exclusion=false, closeRequested=false;
+    bool exclusion=false, closeRequested=false, menuOpen=false;
     int exitCode=0, captureAttempts=0;
     float pressure=0, velocity=0, pressureTarget=0;
     ULONGLONG lastSourceRead=0,lastReport=0,nextCaptureAttempt=0,started=GetTickCount64();
@@ -178,7 +178,7 @@ struct App {
     }
     void report() {
         JsonObject r;putBool(r,L"ok",fatal.empty()&&webReady&&sourceKnown&&lastSourceError.empty());number(r,L"pid",GetCurrentProcessId());
-        number(r,L"uptimeSeconds",(GetTickCount64()-started)/1000.0);put(r,L"version",L"0.1.5");
+        number(r,L"uptimeSeconds",(GetTickCount64()-started)/1000.0);put(r,L"version",L"0.1.6");
         put(r,L"adapter",renderer?renderer->adapterName:L""); putBool(r,L"desktopCaptureReady",renderer&&renderer->ready());
         putBool(r,L"excludedFromCapture",exclusion);putBool(r,L"screenshotMode",screenshotMode);putBool(r,L"topmost",topmost);
         putBool(r,L"saving",actionProcess!=nullptr);
@@ -211,7 +211,7 @@ struct App {
     void updateFrame() {
         auto now=GetTickCount64();
         if(graphicsReady && !fixtureTest && !selfTest && !IsIconic(hwnd)) {
-            if(!screenshotMode && exclusion) {
+            if(!screenshotMode && !menuOpen && exclusion) {
                 if(nextCaptureAttempt && now>=nextCaptureAttempt) {
                     captureAttempts++;nextCaptureAttempt=0;
                     try {renderer->initializeCapture();captureError.clear();theme();}
@@ -246,6 +246,11 @@ struct App {
         if(fixtureTest && now-started>45000) fail(L"Fixture bridge test timed out");
     }
     void menu() {
+        if(menuOpen)return;
+        // TrackPopupMenuEx pumps FrameMessage. Preserve the pre-menu backdrop
+        // until the selected command (including capture affinity changes) finishes.
+        menuOpen=true;
+        struct MenuCapturePause {bool& active;~MenuCapturePause(){active=false;}} pause{menuOpen};
         HMENU menu=CreatePopupMenu();
         AppendMenuW(menu,MF_STRING|(topmost?MF_CHECKED:0),1,L"保持置顶");
         AppendMenuW(menu,MF_STRING|(screenshotMode?MF_CHECKED:0),2,L"暂停动态玻璃（便于截图）");
@@ -255,6 +260,7 @@ struct App {
         AppendMenuW(menu,MF_STRING|(actionProcess?MF_GRAYED:0),5,L"退出");
         POINT p{};GetCursorPos(&p);SetForegroundWindow(hwnd);
         UINT command=TrackPopupMenuEx(menu,TPM_RETURNCMD|TPM_RIGHTBUTTON,p.x,p.y,hwnd,nullptr);DestroyMenu(menu);PostMessageW(hwnd,WM_NULL,0,0);
+        DwmFlush();
         if(command==1) {topmost=!topmost;SetWindowPos(hwnd,topmost?HWND_TOPMOST:HWND_NOTOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_NOACTIVATE);savePosition();}
         if(command==2) {
             screenshotMode=!screenshotMode;
