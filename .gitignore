@@ -1,0 +1,10 @@
+/build/
+/work/
+/verification.json
+/resources/config.json
+/resources/ui/action-result.json
+/resources/ui/action-result.json.*.tmp
+/.vs/
+*.obj
+*.pdb
+*.ilk
