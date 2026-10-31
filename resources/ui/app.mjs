@@ -5,14 +5,17 @@ const bridge = window.chrome?.webview;
 let settings, markdown, tasks = [], source = null, pending = null, undoTask = null, readable = false, fatal = null, sourceError = false;
 let fixtureStarted = false, fixtureResult, materialError = '', paused = false;
 let probeStarted = false, nativeProbe = null;
+let noticeTimer = null;
 const errors = [];
 function send(message) { if (bridge) bridge.postMessage(message); }
-function notice(message, error = false) {
+function notice(message, error = false, duration = 0) {
+  if (noticeTimer) { clearTimeout(noticeTimer); noticeTimer = null; }
   elements.notice.hidden = !message;
   elements['notice-text'].textContent = message;
   elements.notice.classList.toggle('error', error);
   elements.undo.hidden = !undoTask;
   fitHeight();
+  if (message && duration) noticeTimer = setTimeout(() => notice(''), duration);
 }
 function controls() {
   document.querySelectorAll('input[type=checkbox]').forEach(input => { input.disabled = !!pending || !readable; });
@@ -102,7 +105,7 @@ function onActionFinished(result) {
 }
 elements.undo.addEventListener('click', async () => {
   if (!undoTask) return;
-  try { await dispatch({ kind: 'toggle', ...undoTask, done: false }); undoTask = null; notice('已撤销完成'); refresh(); }
+  try { await dispatch({ kind: 'toggle', ...undoTask, done: false }); undoTask = null; notice('已撤销完成', false, 3000); refresh(); }
   catch (error) { notice(error.message, true); }
 });
 elements.refresh.addEventListener('click', refresh);
@@ -136,6 +139,7 @@ function diagnostics() {
     secondaryTextColor: getComputedStyle(elements.status).color,
     statusText: elements.status.textContent, statusStyle: getComputedStyle(elements.status).fontStyle,
     headingText: title.textContent, headingFont: getComputedStyle(title).fontFamily, headingStyle: getComputedStyle(title).fontStyle,
+    headingFontLoaded: document.fonts.check('29px "Parisienne"', 'Inbox'),
     headingOverlap: heading.getBoundingClientRect().right > document.querySelector('.header-actions').getBoundingClientRect().left,
     width: innerWidth, height: innerHeight, dpr: devicePixelRatio,
     documentOverflow: document.documentElement.scrollWidth > innerWidth,
@@ -150,6 +154,7 @@ async function until(predicate) {
 }
 async function runFixtureTest() {
   try {
+    await document.fonts.ready;
     const original = source, count = tasks.length, first = tasks[0];
     if (!first || count < 2) throw new Error('Fixture must contain at least two tasks');
     const probe = await dispatch({ kind: 'probe', report: { bridge: 'native' } });

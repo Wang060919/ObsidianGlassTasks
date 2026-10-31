@@ -178,7 +178,7 @@ struct App {
     }
     void report() {
         JsonObject r;putBool(r,L"ok",fatal.empty()&&webReady&&sourceKnown&&lastSourceError.empty());number(r,L"pid",GetCurrentProcessId());
-        number(r,L"uptimeSeconds",(GetTickCount64()-started)/1000.0);put(r,L"version",L"0.1.7");
+        number(r,L"uptimeSeconds",(GetTickCount64()-started)/1000.0);put(r,L"version",L"0.1.8");
         put(r,L"adapter",renderer?renderer->adapterName:L""); putBool(r,L"desktopCaptureReady",renderer&&renderer->ready());
         putBool(r,L"excludedFromCapture",exclusion);putBool(r,L"screenshotMode",screenshotMode);putBool(r,L"topmost",topmost);
         putBool(r,L"saving",actionProcess!=nullptr);

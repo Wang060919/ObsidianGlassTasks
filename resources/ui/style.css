@@ -1,3 +1,4 @@
+@font-face { font-family: "Parisienne"; src: url("fonts/Parisienne-Regular.ttf") format("truetype"); font-style: normal; font-weight: 400; font-display: swap; }
 :root {
   color-scheme: dark;
   font-family: "Microsoft YaHei UI", "Segoe UI", sans-serif;
@@ -25,7 +26,7 @@ button { -webkit-tap-highlight-color: transparent; }
 .header-actions { display: flex; gap: 2px; }
 .titlebar { display: flex; align-items: center; justify-content: space-between; flex: 0 0 auto; padding: 23px 20px 16px 23px; -webkit-app-region: drag; app-region: drag; user-select: none; cursor: grab; }
 .heading { display: flex; align-items: center; gap: 11px; }
-h1 { margin: 0; font-family: "Anthropic Serif Variable Text", "Anthropic Serif Variable", "Anthropic Serif", Georgia, serif; font-size: 23px; font-weight: 500; font-style: italic; line-height: 1.28; letter-spacing: -.02em; }
+h1 { margin: 0; font-family: "Parisienne", "Anthropic Serif Variable Text", Georgia, cursive; font-size: 29px; font-weight: 400; line-height: 1.02; }
 .count { color: var(--muted); font-size: 14px; font-variant-numeric: tabular-nums; }
 .icon-button { display: grid; place-items: center; width: 32px; height: 32px; padding: 7px; border: 0; border-radius: 9px; background: transparent; color: var(--muted); }
 .icon-button:hover { background: var(--control); color: var(--blue); }
@@ -36,8 +37,8 @@ ul { list-style: none; padding: 0; margin: 0; }
 .task { position: relative; display: flex; align-items: flex-start; gap: 10px; padding: 12px 10px; border-radius: 10px; transition: background-color 150ms ease-out; }
 .task + .task::before { content: ''; position: absolute; top: 0; left: 48px; right: 10px; height: 1px; background: var(--line); }
 .task:hover { background: var(--hover); }
-.check-hit { display: grid; place-items: start center; flex: 0 0 28px; min-height: 32px; padding: 3px 4px 6px; cursor: pointer; }
-.check-hit input { appearance: none; margin: 0; width: 19px; height: 19px; flex-shrink: 0; border: 1.4px solid var(--check); border-radius: 50%; background: rgba(255,255,255,.08); cursor: pointer; }
+.check-hit { display: grid; place-items: start center; flex: 0 0 28px; min-height: 32px; padding: 4.5px 4px 6px; cursor: pointer; }
+.check-hit input { appearance: none; margin: 0; width: 16px; height: 16px; flex-shrink: 0; border: 1.4px solid var(--check); border-radius: 50%; background: rgba(255,255,255,.08); cursor: pointer; }
 .check-hit:hover input { border-color: #9cd2ff; background: rgba(156,210,255,.13); }
 .check-hit input:checked { background: #126aa9; border-color: #126aa9; box-shadow: inset 0 0 0 4px #dcecf7; }
 .task-body { flex: 1; min-width: 0; line-height: 1.65; overflow-wrap: anywhere; padding-top: 0; }
